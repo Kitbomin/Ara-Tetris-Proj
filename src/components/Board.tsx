@@ -9,15 +9,18 @@ type Cell = {
   color: string;
 }
 
+type BoardProps = {
+  currentPiece: {
+    shape: number[][];
+    x: number;
+    y: number;
+    color: string;
+  }
+}
 
-export const [currentPiece, setCurrentPiece] = useState({
-    shape: SHAPES.T,
-    x: 3,  // 시작 x좌표
-    y: 0,  // 시작 y좌표
-    color: '#4ff',
-  });
 
-function Board() {
+
+function Board({ currentPiece }: BoardProps) {
 
   const board: Cell[][] = Array.from({ length: ROWS }, () =>
     Array.from({ length: COLS }, () => ({
@@ -26,6 +29,17 @@ function Board() {
     }))
   );
 
+  currentPiece.shape.forEach((row, rowIdx) => {
+    row.forEach((val, colIdx) => {
+      if (val) {
+        const y = currentPiece.y + rowIdx;
+        const x = currentPiece.x + colIdx;
+        if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
+          board[y][x] = { filled: true, color: currentPiece.color };
+        }
+      }
+    });
+  });
 
   return (
     <div style={{
@@ -38,7 +52,7 @@ function Board() {
         board.map((row, y) => row.map((cell, x) => (
           <div 
               key={`${x} - ${y}`}
-              style={{backgroundColor: cell.color, borderRadius: '2px'}} />
+              style={{backgroundColor: cell.filled ? cell.color : '#111', borderRadius: '2px'}} />
         )))
       }        
       <Block/>
