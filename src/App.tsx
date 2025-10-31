@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import './App.css';
-import { SHAPES } from './components/Block';
 import Board from './components/Board';
+import { SHAPES, COLORS } from './components/Block';
 
 function App() {
   const [currentPiece, setCurrentPiece] = useState({
-    shape: SHAPES.T,
-    x: 3,  // 시작 x좌표
-    y: 0,  // 시작 y좌표
-    color: '#4ff',
+    shape: SHAPES.L,
+    x: 4,
+    y: 0,
+    color: COLORS.L,
   });
 
   return (

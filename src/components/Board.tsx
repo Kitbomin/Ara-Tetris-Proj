@@ -1,13 +1,9 @@
-import React, { useState } from 'react'
-import Block, { SHAPES } from './Block';
+import React from 'react';
 
-const ROWS = 60;
-const COLS = 20;
+const ROWS = 20;
+const COLS = 10;
 
-type Cell = {
-  filled: boolean;
-  color: string;
-}
+type Cell = { filled: boolean; color: string; };
 
 type BoardProps = {
   currentPiece: {
@@ -15,18 +11,12 @@ type BoardProps = {
     x: number;
     y: number;
     color: string;
-  }
-}
-
-
+  };
+};
 
 function Board({ currentPiece }: BoardProps) {
-
   const board: Cell[][] = Array.from({ length: ROWS }, () =>
-    Array.from({ length: COLS }, () => ({
-      filled: false,
-      color: '#111'
-    }))
+    Array.from({ length: COLS }, () => ({ filled: false, color: '#111' }))
   );
 
   currentPiece.shape.forEach((row, rowIdx) => {
@@ -41,24 +31,34 @@ function Board({ currentPiece }: BoardProps) {
     });
   });
 
-  return (
-    <div style={{
-      display: 'grid', gridTemplateRows: `repeat(${ROWS}, 1fr)`, 
-      gridTemplateColumns: `repeat(${COLS}, 1fr)`, gap: '1px', 
-      background: '#222', width: '200px', aspectRatio : `${COLS}/${ROWS}`
-    }} className='Board'>
 
-      {
-        board.map((row, y) => row.map((cell, x) => (
-          <div 
-              key={`${x} - ${y}`}
-              style={{backgroundColor: cell.filled ? cell.color : '#111', borderRadius: '2px'}} />
-        )))
-      }        
-      <Block/>
+  
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateRows: `repeat(${ROWS}, 1fr)`,
+        gridTemplateColumns: `repeat(${COLS}, 1fr)`,
+        gap: '1px',
+        background: '#222',
+        width: '200px',
+        aspectRatio: `${COLS}/${ROWS}`,
+      }}
+      className="Board"
+    >
+      {board.map((row, y) =>
+        row.map((cell, x) => (
+          <div
+            key={`${x}-${y}`}
+            style={{
+              backgroundColor: cell.filled ? cell.color : '#111',
+              borderRadius: '2px',
+            }}
+          />
+        ))
+      )}
     </div>
-  )
+  );
 }
 
-export default Board
-
+export default Board;

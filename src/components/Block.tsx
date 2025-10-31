@@ -37,12 +37,6 @@ export const SHAPES = {
   ]
 }
 
-type blockShape = {
-  block: number[][],
-  color: string;
-}
-
-
 
 
 function Block() {
