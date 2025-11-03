@@ -10,6 +10,15 @@ function App() {
     y: 0,
     color: COLORS.L,
   });
+
+  const [nextPiece, setNextPiece] = useState({
+    shape: SHAPES.J,
+    x: 6,
+    y: 0,
+    color: COLORS.J
+  });
+
+  
   const {pressedKey, keyState} = useInput();
 
   console.log(pressedKey, keyState);
