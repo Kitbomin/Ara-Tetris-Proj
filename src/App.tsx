@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Board from './components/Board';
 import { SHAPES, COLORS } from './components/Block';
 import useInput from './hooks/useInput';
+import { useInterval } from './hooks/useInterval';
 
 function App() {
   const [currentPiece, setCurrentPiece] = useState({
@@ -17,6 +18,9 @@ function App() {
     y: 0,
     color: COLORS.J
   });
+
+  const [delay, setDelay] = useState(1000);
+  useInterval({setCurrentPiece, delay})
 
   
   const {pressedKey, keyState} = useInput();
