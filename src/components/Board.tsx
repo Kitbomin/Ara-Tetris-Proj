@@ -1,6 +1,6 @@
 import React from "react";
 
-const ROWS = 40;
+const ROWS = 30;
 const COLS = 10;
 
 type Cell = { filled: boolean; color: string };
