@@ -12,19 +12,25 @@ function App() {
     <div className="App">
       <h1 className="title">React Tetris</h1>
 
-      <Board board={board} currentPiece={currentPiece} />
+      <div className="game-board">
+        <Board board={board} currentPiece={currentPiece} />
 
-      <div className="controls">
-        {isGameOver ? (
-          <h3 className="game-over">Game Over</h3>
-        ) : (
-          <button className="pause-btn" onClick={() => setIsPaused((prev) => !prev)}>
-            {isPaused ? "Resume" : "Pause"}
-          </button>
-        )}
+        <div className="controls-wrap">
+          <div className="controls">
+            {isGameOver ? (
+              <h3 className="game-over">Game Over</h3>
+            ) : (
+              <button
+                className="pause-btn"
+                onClick={() => setIsPaused((prev) => !prev)}
+              >
+                {isPaused ? "Resume" : "Pause"}
+              </button>
+            )}
+          </div>
+          <NextPiece />
+        </div>
       </div>
-
-      <NextPiece />
     </div>
   );
 }

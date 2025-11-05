@@ -12,10 +12,6 @@
   text-shadow: 0 0 6px #0ff;
 }
 
-.controls {
-  margin-top: 20px;
-}
-
 .pause-btn {
   background-color: #0ff;
   color: #111;
@@ -37,6 +33,9 @@
   text-shadow: 0 0 8px #f55;
 }
 
-.next-piece {
-  margin-top: 24px;
+.game-board {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
 }
