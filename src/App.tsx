@@ -1,36 +1,30 @@
-import { useEffect, useState } from 'react';
-import Board from './components/Board';
-import { SHAPES, COLORS } from './components/Block';
-import useInput from './hooks/useInput';
-import { useInterval } from './hooks/useInterval';
+import React from "react";
+import Board from "./components/Board";
+import NextPiece from "./components/NextPiece";
+import { useTetrisLogic } from "./hooks/useTetrisLogic";
+import "./App.css";
 
 function App() {
-  const [currentPiece, setCurrentPiece] = useState({
-    shape: SHAPES.L,
-    x: 4,
-    y: 0,
-    color: COLORS.L,
-  });
-
-  const [nextPiece, setNextPiece] = useState({
-    shape: SHAPES.J,
-    x: 6,
-    y: 0,
-    color: COLORS.J
-  });
-
-  const [delay, setDelay] = useState(1000);
-  useInterval({setCurrentPiece, delay})
-
-  
-  const {pressedKey, keyState} = useInput();
-
-  console.log(pressedKey, keyState);
+  const { board, currentPiece, isGameOver, isPaused, setIsPaused } =
+    useTetrisLogic();
 
   return (
     <div className="App">
-      <h1>React Tetris</h1>
-      <Board currentPiece={currentPiece} />
+      <h1 className="title">React Tetris</h1>
+
+      <Board board={board} currentPiece={currentPiece} />
+
+      <div className="controls">
+        {isGameOver ? (
+          <h3 className="game-over">Game Over</h3>
+        ) : (
+          <button className="pause-btn" onClick={() => setIsPaused((prev) => !prev)}>
+            {isPaused ? "Resume" : "Pause"}
+          </button>
+        )}
+      </div>
+
+      <NextPiece />
     </div>
   );
 }

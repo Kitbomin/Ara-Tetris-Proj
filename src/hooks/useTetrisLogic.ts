@@ -1,9 +1,92 @@
+import { useCallback, useEffect, useState } from "react";
 import { TETRIS_PIECES } from "../constants/tetris_pieces";
+import { reverseBlockLeft } from "../functions/reverseBlockLeft";
+import useInput from "./useInput";
+import { spawnPiece } from "../functions/spawnPiece";
+import { nextPieceLogic } from "../functions/nextPieceLogic";
+import { useInterval } from "./useInterval";
+import { checkCollision } from "../functions/checkCollision";
+import { createInitialBoard } from "../functions/createInitialBoard";
+import { mergeBlock } from "../functions/mergeBlock";
 
-TETRIS_PIECES
 
+export const useTetrisLogic = () => {
+  const {pressedKey, keyState} = useInput();
+  const [board, setBoard] = useState(createInitialBoard(40, 10));
+  const [currentPiece, setCurrentPiece] = useState(spawnPiece());
+  const [nextPiece, setNextPiece] = useState(spawnPiece());
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
+  const moveInX = useCallback((dir: number) => {
+    const newX = currentPiece.x + dir;
+    if (!checkCollision(board, currentPiece.shape, newX, currentPiece.y)) {
+      setCurrentPiece((prev) => ({...prev, x:newX}));
+    }
+  }, [board, currentPiece]);
 
-// export function reverseBlockRight(matrix: number[][]) {
+  const rotatedBlock = useCallback(()=> {
+    const rotated = reverseBlockLeft(currentPiece.shape);
+    if (!checkCollision(board, rotated, currentPiece.x, currentPiece.y)) {
+      setCurrentPiece((prev) => ({...prev, shape:rotated})); 
+    }
+  }, [board, currentPiece]);
+
+  const fixBlock = useCallback(() => {
+    const merged = mergeBlock(board, currentPiece);
+    setBoard(merged);
+
+    const newPiece = nextPiece;
+    const next = nextPieceLogic();
+    
+
+    setCurrentPiece(newPiece);
+    setNextPiece(next);
+
+    if(checkCollision(merged, newPiece.shape, newPiece.x, newPiece.y)) {
+      setIsGameOver(true);
+    }
+  }, [board, currentPiece, nextPiece]);
+
+  useInterval({
+    board,
+    currentPiece,
+    setCurrentPiece,
+    delay: 800,
+    isPaused: isPaused || isGameOver
+  });
   
-// }
+  useEffect(() => {
+    if (isGameOver) return;
+
+    if(keyState.left) moveInX(-1);
+    if(keyState.right) moveInX(+1);
+    if(keyState.up) rotatedBlock();
+    if(keyState.down) {
+      const nextY = currentPiece.y + 1;
+      if(!checkCollision(board, currentPiece.shape, currentPiece.x, nextY)) {
+        setCurrentPiece((prev) => ({...prev, y:nextY}))
+      } else {
+        fixBlock();
+      }
+    }
+    if (keyState.space) {
+      // 하드드롭 (끝까지 즉시 낙하)
+      let dropY = currentPiece.y;
+      while (!checkCollision(board, currentPiece.shape, currentPiece.x, dropY + 1)) {
+        dropY++;
+      }
+      setCurrentPiece((prev) => ({ ...prev, y: dropY }));
+      fixBlock();
+    }
+  }, [keyState, moveInX, rotatedBlock, board, currentPiece, fixBlock, isGameOver])
+
+  return {
+    board,
+    currentPiece,
+    nextPiece,
+    isGameOver,
+    isPaused,
+    setIsPaused,
+  };
+}

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 // const pressKey = useInput();
 
 // const {left, right, down, up} = useInput();
+// 이거 reducer를 사용했음 그냥 switch가 아님...
 
 type  Direction =  'ArrowLeft' | 'ArrowRight' | 'ArrowDown' | 'ArrowUp' | 'Space' | null;
 
@@ -21,6 +22,8 @@ type KeyState = {
   up: boolean;
   space: boolean;
 };
+
+
 
 const useInput = () => {
   const [pressedKey, setPressedKey] = useState<Direction>(null);

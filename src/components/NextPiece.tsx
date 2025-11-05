@@ -1,25 +1,37 @@
-import React from 'react'
+import React, { useMemo } from "react";
+import { nextPieceLogic } from "../functions/nextPieceLogic";
 
+function NextPiece() {
+  const nextPiece = useMemo(() => nextPieceLogic(), []);
 
-
-type NextPieceProps = {
-  nextPiece: {
-    shape: number[][];
-    color: string;
-}
-};
-
-// 0부터 6까지의 난수를 생성해서 --> 다음 조각의 인덱스번호를 가지고 올것
-
-
-function NextPiece({nextPiece}: NextPieceProps) {
-
-  const {shape, color} = nextPiece;
-
-  
   return (
-    <div>NextPiece</div>
-  )
+    <div className="next-piece">
+      <h3>Next Piece</h3>
+      <div
+        style={{
+          display: "inline-grid",
+          gridTemplateRows: `repeat(${nextPiece.shape.length}, 1fr)`,
+          gridTemplateColumns: `repeat(${nextPiece.shape[0].length}, 1fr)`,
+          gap: "2px",
+          background: "#222",
+          padding: "5px",
+        }}
+      >
+        {nextPiece.shape.map((row, y) =>
+          row.map((cell, x) => (
+            <div
+              key={`${x}-${y}`}
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: cell ? nextPiece.color : "#111",
+              }}
+            ></div>
+          ))
+        )}
+      </div>
+    </div>
+  );
 }
 
-export default NextPiece
+export default NextPiece;
