@@ -1,9 +1,12 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { nextPieceLogic } from "../functions/nextPieceLogic";
+import { useTetrisLogic } from "../hooks/useTetrisLogic";
 
 function NextPiece() {
-  const nextPiece = useMemo(() => nextPieceLogic(), []);
+  const {nextPiece} = useTetrisLogic();
 
+  if(!nextPiece) return null;
+  
   return (
     <div className="next-piece">
       <h3>Next Piece</h3>

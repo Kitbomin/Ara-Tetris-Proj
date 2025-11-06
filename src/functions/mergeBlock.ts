@@ -1,3 +1,8 @@
+type Cell = {
+  filled: boolean;
+  color: string;
+}
+
 type Piece = {
   shape: number[][];
   x: number;
@@ -5,8 +10,8 @@ type Piece = {
   color: string;
 };
 
-export function mergeBlock(board: number[][], piece: Piece): number[][] {
-  const newBoard = board.map(row => [...row]);
+export function mergeBlock(board: Cell[][], piece: Piece): Cell[][] {
+  const newBoard = board.map(row => row.map(cell => ({...cell})));
 
   for (let row = 0; row < piece.shape.length; row++) {
     for (let col = 0; col < piece.shape[row].length; col++) {
@@ -20,7 +25,9 @@ export function mergeBlock(board: number[][], piece: Piece): number[][] {
           boardX >= 0 &&
           boardX < newBoard[0].length
         ) {
-          newBoard[boardY][boardX] = 1; // or piece.color
+          newBoard[boardY][boardX] = {
+            filled: true, color: piece.color
+          }
         }
       }
     }

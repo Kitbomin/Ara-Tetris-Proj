@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { TETRIS_PIECES } from "../constants/tetris_pieces";
 import { reverseBlockLeft } from "../functions/reverseBlockLeft";
 import useInput from "./useInput";
-import { spawnPiece } from "../functions/spawnPiece";
 import { nextPieceLogic } from "../functions/nextPieceLogic";
 import { useInterval } from "./useInterval";
 import { checkCollision } from "../functions/checkCollision";
@@ -12,9 +10,9 @@ import { mergeBlock } from "../functions/mergeBlock";
 
 export const useTetrisLogic = () => {
   const {pressedKey, keyState} = useInput();
-  const [board, setBoard] = useState(createInitialBoard(40, 10));
-  const [currentPiece, setCurrentPiece] = useState(spawnPiece());
-  const [nextPiece, setNextPiece] = useState(spawnPiece());
+  const [board, setBoard] = useState(createInitialBoard(30, 10));
+  const [nextPiece, setNextPiece] = useState(() => nextPieceLogic());
+  const [currentPiece, setCurrentPiece] = useState(() => nextPieceLogic());
   const [isGameOver, setIsGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -48,6 +46,12 @@ export const useTetrisLogic = () => {
     }
   }, [board, currentPiece, nextPiece]);
 
+  const changeBlock = useCallback(() => {
+    setCurrentPiece(nextPiece);
+    const newNext = nextPieceLogic();
+    setNextPiece(newNext);
+  }, [nextPiece])
+
   useInterval({
     board,
     currentPiece,
@@ -68,6 +72,7 @@ export const useTetrisLogic = () => {
         setCurrentPiece((prev) => ({...prev, y:nextY}))
       } else {
         fixBlock();
+        changeBlock();
       }
     }
     if (keyState.space) {
@@ -78,8 +83,9 @@ export const useTetrisLogic = () => {
       }
       setCurrentPiece((prev) => ({ ...prev, y: dropY }));
       fixBlock();
+      changeBlock();
     }
-  }, [keyState, moveInX, rotatedBlock, board, currentPiece, fixBlock, isGameOver])
+  }, [keyState, moveInX, rotatedBlock, board, currentPiece, fixBlock, changeBlock,isGameOver])
 
   return {
     board,

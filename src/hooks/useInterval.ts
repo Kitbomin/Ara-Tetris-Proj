@@ -1,6 +1,12 @@
 import { useEffect, useRef } from "react";
 import { checkCollision } from "../functions/checkCollision";
 
+type Cell = {
+  filled: boolean;
+  color: string;
+}
+
+
 type Piece = {
   shape: number[][];
   x: number;
@@ -9,7 +15,7 @@ type Piece = {
 };
 
 type UseIntervalProps = {
-  board: number[][];
+  board: Cell[][];
   currentPiece: Piece;
   setCurrentPiece: React.Dispatch<React.SetStateAction<Piece>>;
   delay?: number;

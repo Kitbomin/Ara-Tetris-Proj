@@ -3,6 +3,7 @@ import Board from "./components/Board";
 import NextPiece from "./components/NextPiece";
 import { useTetrisLogic } from "./hooks/useTetrisLogic";
 import "./App.css";
+import Block from "./components/Block";
 
 function App() {
   const { board, currentPiece, isGameOver, isPaused, setIsPaused } =
@@ -13,6 +14,7 @@ function App() {
       <h1 className="title">React Tetris</h1>
 
       <div className="game-board">
+        <Block />
         <Board board={board} currentPiece={currentPiece} />
 
         <div className="controls-wrap">
