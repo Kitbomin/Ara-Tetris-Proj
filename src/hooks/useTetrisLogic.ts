@@ -6,6 +6,7 @@ import { useInterval } from "./useInterval";
 import { checkCollision } from "../functions/checkCollision";
 import { createInitialBoard } from "../functions/createInitialBoard";
 import { mergeBlock } from "../functions/mergeBlock";
+import { spawnPiece } from "../functions/spawnPiece";
 
 
 export const useTetrisLogic = () => {
@@ -56,7 +57,7 @@ export const useTetrisLogic = () => {
     board,
     currentPiece,
     setCurrentPiece,
-    delay: 800,
+    delay: 1000,
     isPaused: isPaused || isGameOver
   });
   
@@ -72,7 +73,6 @@ export const useTetrisLogic = () => {
         setCurrentPiece((prev) => ({...prev, y:nextY}))
       } else {
         fixBlock();
-        changeBlock();
       }
     }
     if (keyState.space) {
