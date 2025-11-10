@@ -7,6 +7,7 @@ import { checkCollision } from "../functions/checkCollision";
 import { createInitialBoard } from "../functions/createInitialBoard";
 import { mergeBlock } from "../functions/mergeBlock";
 import { spawnPiece } from "../functions/spawnPiece";
+import { popBlock } from "../functions/popBlock";
 
 
 export const useTetrisLogic = () => {
@@ -16,6 +17,7 @@ export const useTetrisLogic = () => {
   const [currentPiece, setCurrentPiece] = useState(() => nextPieceLogic());
   const [isGameOver, setIsGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [isFilledRow, setFilledRow] = useState();
 
   const moveInX = useCallback((dir: number) => {
     const newX = currentPiece.x + dir;
@@ -34,6 +36,9 @@ export const useTetrisLogic = () => {
   const fixBlock = useCallback(() => {
     const merged = mergeBlock(board, currentPiece);
     setBoard(merged);
+
+    const {newBoard, linesCleared} = popBlock(merged);
+    setBoard(newBoard);
 
     const newPiece = nextPiece;
     const next = nextPieceLogic();
